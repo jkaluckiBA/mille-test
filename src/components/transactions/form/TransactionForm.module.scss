@@ -1,0 +1,10 @@
+.form {
+  background-color: lightgreen;
+  flex: 1;
+}
+
+@media (min-width: $tablet) {
+  .form {
+    height: 100%;
+  }
+}

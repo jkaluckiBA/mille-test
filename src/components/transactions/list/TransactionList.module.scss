@@ -1,0 +1,10 @@
+.list {
+  flex: 1;
+  background-color: green;
+}
+
+@media (min-width: $tablet) {
+  .list {
+    flex: 6;
+  }
+}

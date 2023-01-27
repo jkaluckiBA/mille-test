@@ -1,0 +1,9 @@
+.navbar {
+  position: fixed;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: $nav-bar-height;
+  background-color: $primary;
+}
