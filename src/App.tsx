@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { Footer, NavBar } from '@/components/common';
+import { Footer, NavBar } from '@/components';
 import Transactions from '@/pages/Transactions';
 
 import classes from './App.module.scss';
