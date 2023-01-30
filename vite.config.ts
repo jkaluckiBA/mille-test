@@ -17,7 +17,7 @@ export default defineConfig({
     devSourcemap: false
   },
   build: {
-    sourcemap: 'inline'
+    sourcemap: 'hidden'
   },
   resolve: {
     alias: {

@@ -1,7 +1,10 @@
 .balance {
-  background-color: darkorange;
+  color: $primary;
+  font-weight: 500;
+  background-color: $white;
   padding: 0 0.5rem;
   height: 3rem;
   display: flex;
+  justify-content: center;
   align-items: center;
 }
