@@ -1,4 +1,6 @@
 import type { ReactElement } from 'react';
+import { useMemo } from 'react';
+import Decimal from 'decimal.js';
 
 import {
   Balance,
@@ -6,14 +8,16 @@ import {
   TransactionList,
   TransactionsFilter
 } from '@/features/transactions';
-import { useTransactions } from '@/features/transactions/hooks/useTransactions';
+import { useDebouncedValue, useTransactions } from '@/features/transactions/hooks';
 
 import classes from './Transactions.module.scss';
-import { useMemo } from 'react';
-import Decimal from 'decimal.js';
 
 const Transactions = (): ReactElement => {
-  const { data, status, paginatedData, fetchNextPage } = useTransactions();
+  const [beneficiaryFilter, setBeneficiaryFilter] = useDebouncedValue('');
+
+  const { data, status, paginatedData, fetchNextPage } = useTransactions({
+    beneficiaryFilter
+  });
 
   const totalBalance = useMemo<number>(
     () =>
@@ -33,7 +37,7 @@ const Transactions = (): ReactElement => {
       <div className={classes.top}>
         <div className={classes.left}>
           <Balance balance={totalBalance} isLoading={status.isLoading} />
-          <TransactionsFilter />
+          <TransactionsFilter onFilterChange={{ beneficiary: setBeneficiaryFilter }} />
         </div>
         <TransactionForm />
       </div>

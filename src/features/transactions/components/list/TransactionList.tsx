@@ -7,9 +7,9 @@ import {
   TransactionListHeader,
   TransactionListItem
 } from '@/features/transactions/components/list';
+import { INFINITE_SCROLL_THRESHOLD } from '@/features/transactions/constants';
 
 import classes from './TransactionList.module.scss';
-import { INFINITE_SCROLL_THRESHOLD } from '@/features/transactions/constants';
 
 interface IProps {
   transactions: ITransaction[] | null;
@@ -31,17 +31,17 @@ const TransactionList = ({ transactions, fetchNextPage }: IProps): ReactElement 
     [fetchNextPage]
   );
 
-  if (!transactions?.length) return <div className={classes.list}>No existing transactions</div>;
+  if (!transactions?.length) return <div className={classes.empty}>No existing transactions</div>;
 
   return (
-    <>
+    <div className={classes.list}>
       <TransactionListHeader />
-      <div className={classes.list} onScroll={handleListScroll}>
+      <div className={classes.items} onScroll={handleListScroll}>
         {transactions.map((transaction) => (
           <TransactionListItem key={transaction.id} transaction={transaction} />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

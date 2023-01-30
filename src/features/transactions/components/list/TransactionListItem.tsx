@@ -26,7 +26,7 @@ export const TransactionListItem = ({ transaction }: IProps): ReactElement => {
         <div className={classes.description}>{transaction.description}</div>
       </div>
       <div className={[classes.amount, transaction.amount > 0 ? classes.received : ''].join(' ')}>
-        {transaction.amount}
+        {transaction.amount.toFixed(2)}
       </div>
     </div>
   );

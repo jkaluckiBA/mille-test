@@ -1,10 +1,14 @@
+import { useCallback, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import type { ITransaction } from '@/features/transactions/types';
 
 import { getTransactions } from '@/features/transactions/api';
 import { LIST_QUERY_KEY, LIST_STALE_TIME, PAGE_SIZE } from '@/features/transactions/constants';
-import { useCallback, useMemo, useState } from 'react';
+
+interface IProps {
+  beneficiaryFilter?: string;
+}
 
 interface IReturn {
   status: {
@@ -17,7 +21,7 @@ interface IReturn {
   fetchNextPage: () => void;
 }
 
-export const useTransactions = (): IReturn => {
+export const useTransactions = ({ beneficiaryFilter }: IProps = {}): IReturn => {
   const [page, setPage] = useState<number>(1);
   const query = useQuery({
     queryKey: [LIST_QUERY_KEY],
@@ -25,15 +29,26 @@ export const useTransactions = (): IReturn => {
     staleTime: LIST_STALE_TIME
   });
 
+  const filteredData = useMemo<IReturn['data']>(() => {
+    if (!query.data) return null;
+    if (!beneficiaryFilter) return query.data;
+    return query.data.filter(({ beneficiary }) => {
+      const beneficiaryNames = beneficiary.split(' ');
+      return beneficiaryNames.some((name) =>
+        name.toLowerCase().startsWith(beneficiaryFilter.toLowerCase())
+      );
+    });
+  }, [beneficiaryFilter, query.data]);
+
   const hasNextPage = useMemo<boolean>(() => {
-    if (!query.data) return false;
-    return Math.ceil(query.data.length / PAGE_SIZE) > page;
-  }, [page, query.data]);
+    if (!filteredData) return false;
+    return Math.ceil(filteredData.length / PAGE_SIZE) > page;
+  }, [filteredData, page]);
 
   const paginatedData = useMemo<IReturn['paginatedData']>(() => {
-    if (!query.data) return null;
-    return query.data.slice(0, page * PAGE_SIZE);
-  }, [page, query.data]);
+    if (!filteredData) return null;
+    return filteredData.slice(0, page * PAGE_SIZE);
+  }, [page, filteredData]);
 
   const fetchNextPage = useCallback<IReturn['fetchNextPage']>(() => {
     if (hasNextPage)
@@ -48,7 +63,7 @@ export const useTransactions = (): IReturn => {
       isError: query.isError,
       isSuccess: query.isSuccess
     },
-    data: query.data ?? null,
+    data: filteredData,
     paginatedData,
     fetchNextPage
   };

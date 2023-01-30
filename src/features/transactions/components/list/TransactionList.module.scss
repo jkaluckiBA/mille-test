@@ -1,13 +1,32 @@
 .list {
   flex: 1;
   background-color: $white;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+}
+
+.empty {
+  flex: 1;
+  background-color: $white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem;
 }
 
 @media (min-width: $tablet) {
   .list {
-    flex: 6;
+    flex: 7;
+  }
+
+  .empty {
+    flex: 7;
   }
 }

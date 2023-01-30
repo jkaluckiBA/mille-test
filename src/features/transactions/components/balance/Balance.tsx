@@ -8,7 +8,7 @@ interface IProps {
 }
 
 const Balance = ({ balance }: IProps): ReactElement => {
-  return <div className={classes.balance}>Total Balance: {balance}</div>;
+  return <div className={classes.balance}>Transactions Balance: {balance}</div>;
 };
 
 export { Balance };
