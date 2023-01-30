@@ -4,13 +4,18 @@
   flex-direction: column;
   margin-top: $nav-bar-height;
   margin-bottom: $footer-height;
-  background-color: yellow;
+  background-color: $white;
   max-height: calc(100% - $nav-bar-height - $footer-height);
 }
 
 .top {
   display: flex;
   flex-direction: column-reverse;
+
+  .open-form {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .bottom {
@@ -19,17 +24,12 @@
 
 @media (min-width: $tablet) {
   .transactions-root {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
     margin: $nav-bar-height auto $footer-height;
-    background-color: yellow;
     min-width: 750px;
     width: 80vw;
   }
 
   .top {
-    flex: 4;
     display: flex;
     flex-direction: row;
 
@@ -45,7 +45,6 @@
   }
 
   .bottom {
-    flex: 6;
     display: flex;
   }
 }

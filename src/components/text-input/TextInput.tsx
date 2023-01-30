@@ -1,30 +1,39 @@
 import { useRef } from 'react';
 
-import type { ChangeEventHandler, ReactElement } from 'react';
+import type { ChangeEventHandler, HTMLInputTypeAttribute, ReactElement } from 'react';
+import type { UseFormRegisterReturn } from 'react-hook-form/dist/types/form';
+
+import { joinClasses } from '@/helpers/utils';
 
 import classes from './TextInput.module.scss';
 
-interface IProps {
+interface IProps<T extends string> {
   id: string;
   label: string;
-  type?: string;
+  type?: HTMLInputTypeAttribute;
   onChange?: ChangeEventHandler<HTMLInputElement>;
   value?: string | number;
   placeholder?: string;
+  className?: string;
+  register?: UseFormRegisterReturn<T>;
 }
 
-export const TextInput = ({
+export function TextInput<T extends string = string>({
   id,
   label,
-  type = 'text',
   onChange,
   value,
-  placeholder
-}: IProps): ReactElement => {
+  placeholder,
+  type = 'text',
+  className = '',
+  register
+}: IProps<T>): ReactElement {
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className={classes.textInput} onClick={() => inputRef.current?.focus()}>
+    <div
+      className={joinClasses(classes.textInput, className)}
+      onClick={() => inputRef.current?.focus()}>
       <label htmlFor={id}>{label}</label>
       <input
         ref={inputRef}
@@ -33,7 +42,8 @@ export const TextInput = ({
         onChange={onChange}
         value={value}
         placeholder={placeholder}
+        {...register}
       />
     </div>
   );
-};
+}

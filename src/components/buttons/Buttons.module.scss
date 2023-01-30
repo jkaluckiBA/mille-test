@@ -1,0 +1,17 @@
+.btn {
+  flex-shrink: 1;
+  width: 150px;
+  border-radius: 100px;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $primary;
+  background-color: $white;
+  color: $primary;
+
+  &.btn-submit {
+    background-color: $primary;
+    color: $text-light;
+  }
+}

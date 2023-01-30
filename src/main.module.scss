@@ -1,10 +1,16 @@
 html {
-  font-size: 16px;
+  font-size: 13px;
 }
 
 body {
   color: $text;
   font-family: 'Jost', sans-serif;
+}
+
+@media (min-width: 480px) {
+  html {
+    font-size: 16px;
+  }
 }
 
 @media (min-width: $tablet) {

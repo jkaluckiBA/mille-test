@@ -3,6 +3,8 @@ import { useMemo } from 'react';
 import type { ReactElement } from 'react';
 import type { ITransaction } from '@/features/transactions/types';
 
+import { joinClasses } from '@/helpers/utils';
+
 import classes from './TransactionListItem.module.scss';
 
 interface IProps {
@@ -25,7 +27,7 @@ export const TransactionListItem = ({ transaction }: IProps): ReactElement => {
         <div className={classes.account}>{transaction.account}</div>
         <div className={classes.description}>{transaction.description}</div>
       </div>
-      <div className={[classes.amount, transaction.amount > 0 ? classes.received : ''].join(' ')}>
+      <div className={joinClasses(classes.amount, transaction.amount > 0 ? classes.received : '')}>
         {transaction.amount.toFixed(2)}
       </div>
     </div>

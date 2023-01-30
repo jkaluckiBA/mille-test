@@ -1,10 +1,15 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useQuery } from 'react-query';
 
-import type { ITransaction } from '@/features/transactions/types';
+import type { ITransaction, ITransactionForm } from '@/features/transactions/types';
 
 import { getTransactions } from '@/features/transactions/api';
 import { LIST_QUERY_KEY, LIST_STALE_TIME, PAGE_SIZE } from '@/features/transactions/constants';
+import {
+  calculateTransactionsBalance,
+  generateTransactionId,
+  sortTransactionsByDate
+} from '@/features/transactions/helpers';
 
 interface IProps {
   beneficiaryFilter?: string;
@@ -16,39 +21,67 @@ interface IReturn {
     isError: boolean;
     isSuccess: boolean;
   };
-  data: ITransaction[] | null;
-  paginatedData: ITransaction[] | null;
+  balance: number;
+  paginatedData: ITransaction[];
   fetchNextPage: () => void;
+  addTransaction: (transaction: ITransactionForm) => void;
 }
 
 export const useTransactions = ({ beneficiaryFilter }: IProps = {}): IReturn => {
   const [page, setPage] = useState<number>(1);
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const query = useQuery({
     queryKey: [LIST_QUERY_KEY],
     queryFn: getTransactions,
     staleTime: LIST_STALE_TIME
   });
 
-  const filteredData = useMemo<IReturn['data']>(() => {
-    if (!query.data) return null;
-    if (!beneficiaryFilter) return query.data;
-    return query.data.filter(({ beneficiary }) => {
+  useEffect(() => {
+    setTransactions((query.data ?? []).sort(sortTransactionsByDate));
+  }, [query.data]);
+
+  const filteredData = useMemo<ITransaction[]>(() => {
+    if (!beneficiaryFilter) return transactions;
+    return [...transactions].sort(sortTransactionsByDate).filter(({ beneficiary }) => {
       const beneficiaryNames = beneficiary.split(' ');
       return beneficiaryNames.some((name) =>
         name.toLowerCase().startsWith(beneficiaryFilter.toLowerCase())
       );
     });
-  }, [beneficiaryFilter, query.data]);
+  }, [beneficiaryFilter, transactions]);
+
+  const addTransaction = useCallback<IReturn['addTransaction']>((transaction) => {
+    setTransactions((prevState) => {
+      const newState = [...prevState];
+      newState.push({
+        account: `PL${transaction.accountNumber}`,
+        address: transaction.address,
+        amount: 0 - transaction.amount,
+        beneficiary: transaction.beneficiary,
+        description: transaction.description,
+        date: new Date().toISOString(),
+        id: generateTransactionId(prevState)
+      });
+      newState.sort(sortTransactionsByDate);
+      return newState;
+    });
+    setPage(1);
+  }, []);
+
+  const balance = useMemo<IReturn['balance']>(
+    () => calculateTransactionsBalance(filteredData),
+    [filteredData]
+  );
 
   const hasNextPage = useMemo<boolean>(() => {
     if (!filteredData) return false;
     return Math.ceil(filteredData.length / PAGE_SIZE) > page;
   }, [filteredData, page]);
 
-  const paginatedData = useMemo<IReturn['paginatedData']>(() => {
-    if (!filteredData) return null;
-    return filteredData.slice(0, page * PAGE_SIZE);
-  }, [page, filteredData]);
+  const paginatedData = useMemo<IReturn['paginatedData']>(
+    () => filteredData.slice(0, page * PAGE_SIZE),
+    [page, filteredData]
+  );
 
   const fetchNextPage = useCallback<IReturn['fetchNextPage']>(() => {
     if (hasNextPage)
@@ -63,8 +96,9 @@ export const useTransactions = ({ beneficiaryFilter }: IProps = {}): IReturn => 
       isError: query.isError,
       isSuccess: query.isSuccess
     },
-    data: filteredData,
+    balance,
     paginatedData,
-    fetchNextPage
+    fetchNextPage,
+    addTransaction
   };
 };
