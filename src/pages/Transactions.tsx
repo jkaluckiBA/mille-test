@@ -13,7 +13,7 @@ import { useMemo } from 'react';
 import Decimal from 'decimal.js';
 
 const Transactions = (): ReactElement => {
-  const { data, status } = useTransactions();
+  const { data, status, paginatedData, fetchNextPage } = useTransactions();
 
   const totalBalance = useMemo<number>(
     () =>
@@ -37,7 +37,7 @@ const Transactions = (): ReactElement => {
         </div>
         <TransactionForm />
       </div>
-      <TransactionList transactions={data} />
+      <TransactionList transactions={paginatedData} fetchNextPage={fetchNextPage} />
     </main>
   );
 };
