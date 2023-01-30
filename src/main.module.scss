@@ -1,5 +1,14 @@
-body * {
+html {
+  font-size: 16px;
+}
+
+body {
   color: $text;
   font-family: 'Jost', sans-serif;
-  font-size: 16px;
+}
+
+@media (min-width: $tablet) {
+  html {
+    font-size: 18px;
+  }
 }

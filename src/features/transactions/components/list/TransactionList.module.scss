@@ -1,6 +1,9 @@
 .list {
   flex: 1;
-  background-color: green;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
 @media (min-width: $tablet) {

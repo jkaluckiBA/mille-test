@@ -4,7 +4,7 @@ import { get } from '@/api';
 
 export const getTransactions = async (): Promise<ITransaction[]> => {
   const dtos = await get<ITransactionDTO[]>('/transactions');
-  return dtos.data.map<ITransaction>((dto) => ({
+  const transactions = dtos.data.map<ITransaction>((dto) => ({
     account: dto.account,
     address: dto.address,
     amount: dto.amount,
@@ -13,4 +13,10 @@ export const getTransactions = async (): Promise<ITransaction[]> => {
     description: dto.description,
     id: dto.id
   }));
+  transactions.sort((a, b) => {
+    if (a.date < b.date) return 1;
+    if (a.date > b.date) return -1;
+    return 0;
+  });
+  return transactions;
 };

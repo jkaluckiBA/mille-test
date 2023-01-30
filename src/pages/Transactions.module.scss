@@ -5,6 +5,7 @@
   margin-top: $nav-bar-height;
   margin-bottom: $footer-height;
   background-color: yellow;
+  max-height: calc(100% - $nav-bar-height - $footer-height);
 }
 
 .top {

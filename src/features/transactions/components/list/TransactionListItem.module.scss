@@ -1,0 +1,57 @@
+@import './common';
+
+.item {
+  @include transaction-list;
+  border-bottom: 1px solid $light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    box-shadow: 0 0 20px 0 $light;
+  }
+
+  .transfer-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+
+    .beneficiary-info {
+      font-weight: 600;
+    }
+
+    .account {
+      color: $medium;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 0.25rem 0;
+    }
+
+    .description {
+      color: $light;
+    }
+  }
+
+  .amount {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 1;
+    font-weight: 500;
+    height: fit-content;
+    padding: 5px;
+
+    &.received {
+      background-color: $accent;
+
+      border-radius: 15%;
+
+      &::before {
+        content: '+';
+      }
+    }
+  }
+}

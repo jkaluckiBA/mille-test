@@ -1,0 +1,9 @@
+@import './common';
+
+.header {
+  @include transaction-list;
+  border-bottom: 1px solid $light;
+  font-weight: 500;
+  background-color: $white;
+  color: $primary;
+}

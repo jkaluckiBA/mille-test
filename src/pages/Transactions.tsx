@@ -9,9 +9,21 @@ import {
 import { useTransactions } from '@/features/transactions/hooks/useTransactions';
 
 import classes from './Transactions.module.scss';
+import { useMemo } from 'react';
+import Decimal from 'decimal.js';
 
 const Transactions = (): ReactElement => {
-  const { status } = useTransactions();
+  const { data, status } = useTransactions();
+
+  const totalBalance = useMemo<number>(
+    () =>
+      Number(
+        data
+          ?.reduce<Decimal>((acc, transaction) => acc.plus(transaction.amount), new Decimal(0))
+          .toFixed(2)
+      ) ?? 0,
+    [data]
+  );
 
   if (status.isLoading) return <main className={classes.transactionsRoot}>Loading</main>;
   if (status.isError) return <main className={classes.transactionsRoot}>Error</main>;
@@ -20,12 +32,12 @@ const Transactions = (): ReactElement => {
     <main className={classes.transactionsRoot}>
       <div className={classes.top}>
         <div className={classes.left}>
-          <Balance />
+          <Balance balance={totalBalance} isLoading={status.isLoading} />
           <TransactionsFilter />
         </div>
         <TransactionForm />
       </div>
-      <TransactionList />
+      <TransactionList transactions={data} />
     </main>
   );
 };
