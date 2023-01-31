@@ -8,6 +8,7 @@ import { Button, PrimaryButton, TextInput } from '@/components';
 import classes from './TransactionForm.module.scss';
 import { yupResolver } from '@hookform/resolvers/yup';
 import transactionSchema from '@/features/transactions/validators/transactionSchema';
+import { useNotifications } from '@/hooks/useNotifications';
 
 interface IProps {
   onFormSubmit: (values: ITransactionForm) => void;
@@ -15,6 +16,7 @@ interface IProps {
 }
 
 const TransactionForm = ({ onFormSubmit, closeForm }: IProps): ReactElement => {
+  const { addNotification } = useNotifications();
   const {
     handleSubmit,
     register,
@@ -31,8 +33,13 @@ const TransactionForm = ({ onFormSubmit, closeForm }: IProps): ReactElement => {
       <form
         className={classes.form}
         onSubmit={handleSubmit((values) => {
-          onFormSubmit(values);
-          reset();
+          try {
+            onFormSubmit(values);
+            reset();
+            addNotification('Successfully sent a transaction', 'success');
+          } catch (e) {
+            addNotification('Cannot sent a transaction', 'error');
+          }
         })}>
         <TextInput
           id="amount"

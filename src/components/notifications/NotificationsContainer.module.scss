@@ -1,0 +1,41 @@
+.notification-root {
+  position: fixed;
+  bottom: $footer-height;
+  right: 2rem;
+  z-index: 100;
+  width: 15rem;
+  font-size: 1.25rem;
+
+  .notification {
+    padding: 0.5rem 1rem;
+    margin: 1rem 0 1rem;
+    color: $white;
+    background-color: $primary;
+    width: auto;
+    height: 4rem;
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow: hidden;
+
+    &.success {
+      background-color: $success;
+    }
+
+    &.error {
+      background-color: $danger;
+    }
+
+    &.warning {
+      background-color: $warning;
+    }
+
+    &:last-child {
+      margin-bottom: 0.25rem;
+    }
+  }
+}
