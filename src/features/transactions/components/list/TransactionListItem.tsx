@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import type { ReactElement } from 'react';
 import type { ITransaction } from '@/features/transactions/types';
@@ -13,13 +13,14 @@ interface IProps {
 }
 
 export const TransactionListItem = ({ transaction, removeTransaction }: IProps): ReactElement => {
+  const [isDisplayed, setIsDisplayed] = useState<boolean>(true);
   const transactionDate = useMemo<string>(() => {
     const date = new Date(transaction.date);
     return `${date.toLocaleDateString()}`;
   }, [transaction.date]);
 
   return (
-    <div className={classes.item}>
+    <div className={joinClasses(classes.item, isDisplayed ? classes.show : '')}>
       <div>{transactionDate}</div>
       <div className={classes.transferInfo}>
         <div className={classes.beneficiaryInfo}>
@@ -31,7 +32,14 @@ export const TransactionListItem = ({ transaction, removeTransaction }: IProps):
       <div className={joinClasses(classes.amount, transaction.amount > 0 ? classes.received : '')}>
         {transaction.amount.toFixed(2)}
       </div>
-      <div onClick={() => removeTransaction(transaction.id)} className={classes.remove}>
+      <div
+        onClick={() => {
+          setIsDisplayed(false);
+          setTimeout(() => {
+            removeTransaction(transaction.id);
+          }, 300);
+        }}
+        className={classes.remove}>
         X
       </div>
     </div>

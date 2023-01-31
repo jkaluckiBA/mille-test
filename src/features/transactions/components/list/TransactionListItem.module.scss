@@ -4,6 +4,13 @@
   @include transaction-list;
   position: relative;
   border-bottom: 1px solid $light;
+  transform: translateY(-300px);
+  transition: all 0.6s ease-out;
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   .remove {
     background-color: $danger;
