@@ -9,9 +9,10 @@ import classes from './TransactionListItem.module.scss';
 
 interface IProps {
   transaction: ITransaction;
+  removeTransaction: (id: ITransaction['id']) => void;
 }
 
-export const TransactionListItem = ({ transaction }: IProps): ReactElement => {
+export const TransactionListItem = ({ transaction, removeTransaction }: IProps): ReactElement => {
   const transactionDate = useMemo<string>(() => {
     const date = new Date(transaction.date);
     return `${date.toLocaleDateString()}`;
@@ -29,6 +30,9 @@ export const TransactionListItem = ({ transaction }: IProps): ReactElement => {
       </div>
       <div className={joinClasses(classes.amount, transaction.amount > 0 ? classes.received : '')}>
         {transaction.amount.toFixed(2)}
+      </div>
+      <div onClick={() => removeTransaction(transaction.id)} className={classes.remove}>
+        X
       </div>
     </div>
   );

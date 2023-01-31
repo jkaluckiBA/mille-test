@@ -1,6 +1,5 @@
-import { useState } from 'react';
-
 import type { ReactElement } from 'react';
+import { useState } from 'react';
 
 import {
   Balance,
@@ -10,16 +9,19 @@ import {
 } from '@/features/transactions';
 import { useDebouncedValue, useTransactions } from '@/features/transactions/hooks';
 import { PrimaryButton } from '@/components';
+import { useNotifications } from '@/hooks/useNotifications';
 
 import classes from './Transactions.module.scss';
 
 const Transactions = (): ReactElement => {
   const [isFormDisplayed, setIsFormDisplayed] = useState<boolean>(false);
+  const { addNotification } = useNotifications();
   const [beneficiaryFilter, setBeneficiaryFilter] = useDebouncedValue('');
 
-  const { balance, status, paginatedData, fetchNextPage, addTransaction } = useTransactions({
-    beneficiaryFilter
-  });
+  const { balance, status, paginatedData, fetchNextPage, addTransaction, removeTransaction } =
+    useTransactions({
+      beneficiaryFilter
+    });
 
   if (status.isLoading) return <main className={classes.transactionsRoot}>Loading</main>;
   if (status.isError) return <main className={classes.transactionsRoot}>Error</main>;
@@ -42,7 +44,18 @@ const Transactions = (): ReactElement => {
           </div>
         )}
       </div>
-      <TransactionList transactions={paginatedData} fetchNextPage={fetchNextPage} />
+      <TransactionList
+        transactions={paginatedData}
+        fetchNextPage={fetchNextPage}
+        removeTransaction={(id) => {
+          try {
+            removeTransaction(id);
+            addNotification('Successfully removed transaction', 'success');
+          } catch (e) {
+            addNotification('Cannot remove transaction', 'error');
+          }
+        }}
+      />
     </main>
   );
 };

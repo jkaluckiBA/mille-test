@@ -4,11 +4,11 @@ import type { ReactElement } from 'react';
 import type { ITransactionForm } from '@/features/transactions/types';
 
 import { Button, PrimaryButton, TextInput } from '@/components';
-
-import classes from './TransactionForm.module.scss';
 import { yupResolver } from '@hookform/resolvers/yup';
 import transactionSchema from '@/features/transactions/validators/transactionSchema';
 import { useNotifications } from '@/hooks/useNotifications';
+
+import classes from './TransactionForm.module.scss';
 
 interface IProps {
   onFormSubmit: (values: ITransactionForm) => void;

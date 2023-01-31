@@ -1,7 +1,8 @@
 import type { HTMLProps, ReactElement } from 'react';
 
-import classes from './Buttons.module.scss';
 import { joinClasses } from '@/helpers/utils';
+
+import classes from './Buttons.module.scss';
 
 interface IButtonProps extends HTMLProps<HTMLButtonElement> {
   type?: 'submit' | 'reset' | 'button' | undefined;

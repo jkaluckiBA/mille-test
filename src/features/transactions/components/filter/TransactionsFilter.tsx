@@ -1,10 +1,11 @@
-import type { ReactElement } from 'react';
 import { useEffect, useState } from 'react';
+
+import type { ReactElement } from 'react';
+import type { ITransaction } from '@/features/transactions/types';
 
 import { TextInput } from '@/components';
 
 import classes from './TransactionFilter.module.scss';
-import { ITransaction } from '@/features/transactions/types';
 
 interface IProps {
   onFilterChange?: {

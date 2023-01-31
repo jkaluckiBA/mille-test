@@ -14,9 +14,14 @@ import classes from './TransactionList.module.scss';
 interface IProps {
   transactions: ITransaction[] | null;
   fetchNextPage: () => void;
+  removeTransaction: (id: ITransaction['id']) => void;
 }
 
-const TransactionList = ({ transactions, fetchNextPage }: IProps): ReactElement => {
+const TransactionList = ({
+  transactions,
+  fetchNextPage,
+  removeTransaction
+}: IProps): ReactElement => {
   const handleListScroll = useCallback<UIEventHandler<HTMLDivElement>>(
     (e) => {
       const listContainer = e.target as HTMLDivElement;
@@ -38,7 +43,11 @@ const TransactionList = ({ transactions, fetchNextPage }: IProps): ReactElement 
       <TransactionListHeader />
       <div className={classes.items} onScroll={handleListScroll}>
         {transactions.map((transaction) => (
-          <TransactionListItem key={transaction.id} transaction={transaction} />
+          <TransactionListItem
+            key={transaction.id}
+            transaction={transaction}
+            removeTransaction={removeTransaction}
+          />
         ))}
       </div>
     </div>

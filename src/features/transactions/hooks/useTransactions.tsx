@@ -25,6 +25,7 @@ interface IReturn {
   paginatedData: ITransaction[];
   fetchNextPage: () => void;
   addTransaction: (transaction: ITransactionForm) => void;
+  removeTransaction: (id: ITransaction['id']) => void;
 }
 
 export const useTransactions = ({ beneficiaryFilter }: IProps = {}): IReturn => {
@@ -68,6 +69,14 @@ export const useTransactions = ({ beneficiaryFilter }: IProps = {}): IReturn => 
     setPage(1);
   }, []);
 
+  const removeTransaction = useCallback<IReturn['removeTransaction']>((id) => {
+    setTransactions((prevState) => {
+      const newState = [...prevState];
+      return newState.filter((transaction) => transaction.id !== id);
+    });
+    setPage(1);
+  }, []);
+
   const balance = useMemo<IReturn['balance']>(
     () => calculateTransactionsBalance(filteredData),
     [filteredData]
@@ -99,6 +108,7 @@ export const useTransactions = ({ beneficiaryFilter }: IProps = {}): IReturn => 
     balance,
     paginatedData,
     fetchNextPage,
-    addTransaction
+    addTransaction,
+    removeTransaction
   };
 };

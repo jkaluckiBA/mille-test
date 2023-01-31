@@ -2,7 +2,18 @@
 
 .item {
   @include transaction-list;
+  position: relative;
   border-bottom: 1px solid $light;
+
+  .remove {
+    background-color: $danger;
+    color: $text-light;
+    position: absolute;
+    top: 0.25rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 50%;
+  }
 
   &:last-child {
     border-bottom: none;
