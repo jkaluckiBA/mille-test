@@ -6,6 +6,8 @@ import type { ITransactionForm } from '@/features/transactions/types';
 import { Button, PrimaryButton, TextInput } from '@/components';
 
 import classes from './TransactionForm.module.scss';
+import { yupResolver } from '@hookform/resolvers/yup';
+import transactionSchema from '@/features/transactions/validators/transactionSchema';
 
 interface IProps {
   onFormSubmit: (values: ITransactionForm) => void;
@@ -13,7 +15,16 @@ interface IProps {
 }
 
 const TransactionForm = ({ onFormSubmit, closeForm }: IProps): ReactElement => {
-  const { handleSubmit, register, reset } = useForm<ITransactionForm>();
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors, touchedFields }
+  } = useForm<ITransactionForm>({
+    resolver: yupResolver(transactionSchema),
+    reValidateMode: 'onChange',
+    mode: 'onSubmit'
+  });
   return (
     <div className={classes.formRoot}>
       <span className={classes.title}>New Transaction</span>
@@ -22,39 +33,48 @@ const TransactionForm = ({ onFormSubmit, closeForm }: IProps): ReactElement => {
         onSubmit={handleSubmit((values) => {
           onFormSubmit(values);
           reset();
-          closeForm();
         })}>
         <TextInput
           id="amount"
           label="Amount"
-          className={classes.field}
           register={register('amount')}
           type="number"
+          required
+          error={errors.amount}
+          touched={touchedFields.amount}
         />
         <TextInput
           id="accountNumber"
           label="Account Number"
-          className={classes.field}
           register={register('accountNumber')}
           type="number"
+          required
+          error={errors.accountNumber}
+          touched={touchedFields.accountNumber}
         />
         <TextInput
           id="beneficiary"
           label="Beneficiary"
-          className={classes.field}
           register={register('beneficiary')}
+          required
+          error={errors.beneficiary}
+          touched={touchedFields.beneficiary}
         />
         <TextInput
           id="address"
           label="Address"
-          className={classes.field}
           register={register('address')}
+          required
+          error={errors.address}
+          touched={touchedFields.address}
         />
         <TextInput
           id="description"
           label="Description"
-          className={classes.field}
           register={register('description')}
+          required
+          error={errors.description}
+          touched={touchedFields.description}
         />
         <div className={classes.btnContainer}>
           <Button

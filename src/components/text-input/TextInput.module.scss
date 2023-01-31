@@ -1,14 +1,13 @@
 .text-input {
   flex: 1;
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
 
-  & > label {
+  .label {
     font-weight: 500;
   }
 
-  & > input {
+  .input {
     flex: 1;
     outline: none;
     color: $dark;
@@ -18,5 +17,26 @@
     border-radius: 10rem;
     height: 2rem;
     padding: 0.25rem 1rem;
+  }
+
+  &.required {
+    .label::after {
+      content: '*';
+      color: $danger;
+    }
+  }
+
+  &.error {
+    color: $danger;
+
+    .input {
+      border-color: $danger;
+    }
+  }
+
+  .input-error {
+    color: $danger;
+    min-height: 1rem;
+    padding-left: 0.5rem;
   }
 }
